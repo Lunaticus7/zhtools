@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 regex = "*"
+schema = "*"
+more-itertools = "*"
 
 [dev-packages]
 flake8 = "*"
