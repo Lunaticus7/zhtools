@@ -6,6 +6,8 @@ from math import sqrt
 def cosine(first, second, partial=False):
     if not first and not second:
         return 1.0
+    if not first or not second:
+        return 0.0
 
     first_term_freq = defaultdict(int)
     for term in first:
@@ -18,16 +20,16 @@ def cosine(first, second, partial=False):
     first_norm, second_norm, inner_product = 0, 0, 0
     for term, freq in first_term_freq.items():
         first_norm += freq ** 2
-        inner_product += freq * second_term_freq[term]
+        if partial:
+            inner_product += freq * min(freq, second_term_freq[term])
+        else:
+            inner_product += freq * second_term_freq[term]
 
     for term, freq in second_term_freq.items():
-        if term in first_term_freq or not partial:
-            second_norm += freq ** 2
+        second_norm += freq ** 2
 
-    if first_norm == 0 and second_norm == 0:
-        return 1.0
-    if first_norm == 0 or second_norm == 0:
-        return 0.0
+    if partial:
+        return inner_product / first_norm
 
     return inner_product / sqrt(first_norm * second_norm)
 
