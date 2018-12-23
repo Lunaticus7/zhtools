@@ -69,12 +69,12 @@ def jaccard(first, second, partial=False):
 def lcs(first, second, partial=False):
     if not first and not second:
         return 1.0
+    if not first or not second:
+        return 0.0
 
     alignments = SequenceMatcher(a=first, b=second, autojunk=False)
     lcs_length = sum([size for _, _, size in alignments.get_matching_blocks()])
     if partial:
-        if first:
-            return lcs_length / len(first)
-        return 0.0
+        return lcs_length / len(first)
 
     return 2 * lcs_length / (len(first) + len(second))
