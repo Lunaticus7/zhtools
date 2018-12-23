@@ -29,7 +29,9 @@ def compute_similarity(first, second, method='jaccard', tokenizer=None,
     second_terms = tokenizer.lcut(second)
 
     similarity = 0.0
-    ngram_levels = range(ngram_range[0], ngram_range[-1] + 1)
+    ngram_levels = list(range(ngram_range[0], ngram_range[-1] + 1))
+    if not ngram_weights:
+        ngram_weights = [1 for _ in range(len(ngram_levels))]
     for ngram_level, weight in zip(ngram_levels, ngram_weights):
         first_ngrams = windowed(first_terms, ngram_level)
         second_ngrams = windowed(second_terms, ngram_level)
