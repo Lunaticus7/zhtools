@@ -37,15 +37,15 @@ def cosine(first, second, partial=False):
 def dice(first, second, partial=False):
     if not first and not second:
         return 1.0
+    if not first or not second:
+        return 0.0
 
     first_set = set(first)
     second_set = set(second)
 
     common_set = first_set & second_set
     if partial:
-        if first_set:
-            return len(common_set) / len(first_set)
-        return 0.0
+        return len(common_set) / len(first_set)
 
     return 2 * len(common_set) / (len(first_set) + len(second_set))
 
