@@ -71,10 +71,10 @@ class InvertedIndex():
     In [3]: inv_index.add_document({"id": "1", "content": "hello world"})
     In [4]: inv_index.add_document({"id": "2", "content": "world wide web"})
     In [5]: inv_index.retrieve("world")
-    Out[5]: [{"score": 0.5, "document": {"id": 1, "content": "hello world"}},
-             {"score": 0.33, "document": {"id": 2, "content": "world wide web"}}]
+    Out[5]: [{"score": 0.5, "document": {"id": "1", "content": "hello world"}},
+             {"score": 0.33, "document": {"id": "2", "content": "world wide web"}}]
     In [6]: inv_index.match("content", "hello world")
-    Out[6]: [{"id": 2, "content": "world wide web"}]
+    Out[6]: [{"id": "2", "content": "world wide web"}]
     """
 
     FIELD_ID = 'id'
@@ -312,7 +312,10 @@ class InvertedIndex():
 
         # 当 value 为非字符串内容时，先从 index 中获得文档的 id，再取得文档
         if not isinstance(value, str):
-            for docid in self.index[field_id].get(value, set()):
+            term_id = self.term_dict.get(value)
+            if term_id is None:
+                return []
+            for docid in self.index[field_id].get(term_id, set()):
                 documents.append(self.storage.get_by_id(docid))
 
             return documents
