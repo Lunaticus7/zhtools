@@ -10,11 +10,8 @@ def to_halfwidth(text):
         elif not name or name.find('FULLWIDTH') != 0:
             result += char
         else:
-            try:
-                new_name = name.replace('FULLWIDTH', '').strip()
-                new_char = unicodedata.lookup(new_name)
-                result += new_char
-            except KeyError:
-                result += char
+            new_name = name.replace('FULLWIDTH', '').strip()
+            new_char = unicodedata.lookup(new_name)
+            result += new_char
 
     return result
