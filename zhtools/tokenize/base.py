@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import json
 import logging
-import re
+from typing.re import Pattern
 
 import regex
 from more_itertools import windowed
@@ -34,7 +34,7 @@ class Tokenizer(ABC):
     _tokenizers = {}
 
     def __init__(self, *args, **kwargs):
-        ...
+        raise NotImplementedError
 
     @classmethod
     def from_config(cls, config):
@@ -54,7 +54,7 @@ class Tokenizer(ABC):
 
     @abstractmethod
     def tokenize(self, text):
-        ...
+        raise NotImplementedError
 
     def cut(self, text):
         return self.tokenize(text)
@@ -76,8 +76,8 @@ class NgramTokenizer(Tokenizer):
         self.filter_pattern = None
         if filter_pattern:
             if isinstance(filter_pattern, str):
-                self.filter_patterns = regex.compile(filter_pattern)
-            elif isinstance(filter_pattern, (re.Pattern, regex.Pattern)):
+                self.filter_pattern = regex.compile(filter_pattern)
+            elif isinstance(filter_pattern, (Pattern, regex.Pattern)):
                 self.filter_pattern = filter_pattern
             else:
                 raise ValueError("invalid filter pattern: {}".format(filter_pattern))
